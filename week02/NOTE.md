@@ -47,4 +47,39 @@
 ##相关概念
 **字符编码：**字集码是把字符集中的字符编码为指定集合中某一对象（例如：比特模式、自然数序列、8 位元组或者电脉冲），以便文本在计算机中存储和通过通信网络的传递。
 **Unicode：**又称万国码、国际码、统一码、单一码。是计算机科学领域里的一项业界标准。它对世界上大部分的文字系统进行了整理、编码。需要注意的是，Unicode 只是一个符号集，它只规定了符号的二进制代码，却没有规定这个二进制代码应该如何存储。而UTF-8 是在互联网上使用最广的一种 Unicode 的实现方式，另外还有UTF-16、UTF-32等。
-**JS的InputElement:**WhiteSpace、LineTerminator、Comment、Token、Punctuator。
+**JS的顶级输入-InputElement:**
+- WhiteSpace
+- LineTerminator
+- Comment
+- Token
+  - Punctuator
+  - IdentifierName
+    - Keywords
+    - Identifier
+    - Future reserved keywords : enum
+  - Literal
+
+**JS的Types:**
+- Number
+  - DecimalLiteral 
+  - BinaryIntegerLiteral : 0b
+  - OctalIntegerLiteral : 0o
+  - HexIntegerLiteral : 0x
+- String : 'abc ' ''abc " `abc`
+  - ASCII
+  - Unicode 
+  - UCS U+0000 - U+FFFF (BMP范围)
+  - GB: GB2312 GBK GB18030
+  - ISO-8859
+  - BIG5
+- Boolean
+- Object
+- Null
+- Undefined
+- Symbol
+
+#案例
+#####浮点数比较
+Math.abs(0.1+0.2-0.3)<=Number.EPSILON
+#####合法的整数
+97 .toString(2) 而不能写成 97.toString(2) 因为97.本身就是合法整数

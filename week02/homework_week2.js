@@ -15,13 +15,13 @@ function UTF8Encoding(sInput) {
       // 单字节字符
       resEle = 0 + ele.toString(2);
     } else {
-      // 先把十进制数转成二进制字符串，转成数组存储
-      let arrReBinRes = ele.toString(2).split("");
+      // 先把十进制数转成二进制字符串，转成数组再转置储存
+      let arrReBinRes = ele.toString(2).split("")
       let arrTemplet = [];
-      if (127 < ele <= 2047) {
+      if (ele <= 2047) {
         // 双字节字符
         arrTemplet = "xxxxxx01 xxxxx011".split("");
-      } else if (2047 < ele <= 65535) {
+      } else if (ele <= 65535) {
         // 三字节字符
         arrTemplet = "xxxxxx01 xxxxxx01 xxxx0111".split("");
       } else {
@@ -33,6 +33,8 @@ function UTF8Encoding(sInput) {
     return resEle;
   });
   function handleEncoding(srcArr, temArr) {
+    console.log(srcArr)
+    console.log(temArr)
     let res = "";
     for (let i = 0; i < temArr.length; i++) {
       if (temArr[i] === "x") {
