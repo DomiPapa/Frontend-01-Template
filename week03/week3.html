@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>week3</title>
+  </head>
+  <body>
+    <script>
+      // number转string, 考虑number包含各种进制及科学计数法 1231 0x1011 0b1001 0o1011 10.3e10 小数等
+      function convertStringToNumber(string, x) {
+        // 字符串转十进制数字
+        // @pram  String string 待转字符串
+        // @x String string 设置需要字符串当前进制
+        if (string.indexOf("0b") != -1) {
+          // 二进制数
+          string = string.split("0b")[1];
+        }
+        if (string.indexOf("0o") != -1) {
+          // 八进制数
+          string = string.split("0o")[1];
+        }
+        if (string.indexOf("0x") != -1) {
+          // 十六进制数
+          string = string.split("0x")[1];
+        }
+
+        if (arguments.length < 2) {
+          // 不输入参数x时 默认10进制
+          x = 10;
+        }
+        var chars = string.split("");
+        var number = 0;
+        var i = 0;
+        // 分段循环 while比for更清晰
+        while (i < chars.length && chars[i] != ".") {
+          number = number * x;
+          // 48是"0"的码点
+          // number += chars[i].codePointAt(0) - 48;
+          // 十六进制，A的码点大于57(9)
+          number +=
+            chars[i].codePointAt(0) - (chars[i].codePointAt(0) > 57 ? 55 : 48);
+          i++;
+        }
+        if (chars[i] === ".") {
+          i++;
+        }
+        var fraction = 1;
+        while (i < chars.length) {
+          fraction = fraction / x;
+          number +=
+            (chars[i].codePointAt(0) -
+              (chars[i].codePointAt(0) > 57 ? 55 : 48)) *
+            fraction;
+          i++;
+        }
+        return number;
+      }
+      // 遗留问题：未处理科学计数法表示的数字
+      // console.log(convertStringToNumber("321.123"))
+      // console.log(convertStringToNumber("0b11",2))
+      // console.log(convertStringToNumber("0o11",8))
+      // console.log(convertStringToNumber("0xA1",16))
+
+      function convertNumberToString(number, x) {
+        // 如果是零 直接输出
+        if (number === 0) {
+          return "0";
+        }
+        if (arguments.length < 2) {
+          // 不输入参数x时 默认10进制
+          x = 10;
+        }
+        var integer = Math.floor(number);
+        var fraction = number - integer;
+        var string = "";
+        while (integer > 0) {
+          string = String(integer % x) + string;
+          integer = Math.floor(integer / x);
+        }
+        var fraction_string = "";
+        if (fraction != 0) {
+          fraction_string = ".";
+        }
+        while (fraction > 0.0001) {
+          // 小数部分在计算机中的存储与数学计算不一致，暂时做截断一个范围处理(并不完美)
+          fraction_string = fraction_string + String(Math.floor(fraction * x));
+          fraction = fraction * x - Math.floor(fraction * x);
+        }
+        return string + fraction_string;
+      }
+      // console.log(convertNumberToString(123.12312011))
+      // console.log(convertNumberToString(0b11))
+      // console.log(convertNumberToString(0x11,16))
+      // console.log(convertNumberToString(0))
+      // 遗留问题：如何测非十进制的小数呢？
+    </script>
+  </body>
+</html>
