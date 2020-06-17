@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tictactoe</title>
+    <style>
+      .cell {
+        width: 100px;
+        height: 100px;
+        background-color: green;
+        display: inline-block;
+        border: solid 1px white;
+        vertical-align: middle;
+        /* 处理文字 */
+        line-height: 100px;
+        font-size: 50px;
+        color: red;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="board"></div>
+    <script>
+      let pattern = [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+      ]
+      let color = 1
+      let board = document.getElementById('board')
+      show(pattern, board)
+
+      function show (pattern, board) {
+        board.innerHTML = ''
+        for (let i = 0; i < pattern.length; i++) {
+          for (let j = 0; j < pattern[i].length; j++) {
+            let cell = document.createElement('div')
+            cell.addEventListener('click', () => move(j, i))
+            cell.classList.add('cell')
+            cell.innerText =
+              pattern[i][j] === 2 ? 'x' : pattern[i][j] === 1 ? 'o' : ''
+            board.appendChild(cell)
+          }
+          board.appendChild(document.createElement('br'))
+        }
+      }
+
+      function move (x, y) {
+        if (pattern[y][x] !== 0) {
+          return
+        }
+        pattern[y][x] = color
+        // 判断
+        if (check (pattern, color)) {
+            alert(color===2? 'x is winner':'o is winner')
+        }
+        color = 3 - color
+        show(pattern, board)
+      }
+
+      // 全棋盘检查法
+      function check (pattern, color) {
+        // 一行一行验证
+        for (let i = 0; i < 3; i++) {
+          let win = true
+
+          for (let j = 0; j < 3; j++) {
+            if (pattern[i][j] !== color) {
+              win = false
+              break
+            }
+          }
+          if (win) {
+            return true
+            console.log('win')
+          }
+        }
+        // 一列一列验证
+
+        for (let i = 0; i < 3; i++) {
+          let win = true
+          for (let j = 0; j < 3; j++) {
+            if (pattern[j][i] !== color) {
+              win = false
+              break
+            }
+          }
+          if (win) {
+            return true
+            console.log('win')
+          }
+        }
+
+        // 斜向1 只检查三个位置 循环3次即可
+        {
+          let win = true
+          for (let j = 0; j < 3; j++) {
+            if (pattern[j][j] !== color) {
+              win = false
+              break
+            }
+          }
+          if (win) {
+            return true
+            console.log('win')
+          }
+        }
+
+        // 对称斜向2
+        {
+          let win = true
+          for (let j = 0; j < 3; j++) {
+            if (pattern[j][2 - j] !== color) {
+              win = false
+              break
+            }
+          }
+          if (win) {
+            return true
+            console.log('win')
+          }
+        }
+
+        return false
+    
+      }
+
+      function clone(pattern){
+          return JSON.parse(JSON.stringify(pattern));
+      }
+
+      function willWin(pattern,color){
+          for (let i = 0; i < 3; i++) {
+              for (let j = 0; j < 3; j++) {
+                if(pattern[i][j])
+                    continue;
+                let tmp = clone(pattern);
+                tmp[i][j] = color;
+                if(check(tmp,color)){
+                    return true;
+                }
+              }
+              return false
+          }
+      }
+    </script>
+  </body>
+</html>
