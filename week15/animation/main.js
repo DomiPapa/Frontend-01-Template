@@ -1,5 +1,8 @@
 import {createElement, Text, Wrapper} from './createElement'
 
+// import {Carousel} from "./carousel.view"
+
+
 class Carousel {
   constructor(config){
     this.children = []
@@ -74,3 +77,6 @@ let component = <Carousel data = {[
   ]}></Carousel>
 
 component.mountTo(document.body)
+
+
+

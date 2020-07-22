@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <title>carousel component</title>
+  </head>
+  <style>
+    .carousel {
+      width: 500px;
+      height: 300px;
+      white-space: nowrap;
+      outline: solid 1px blue;
+      margin: auto;
+      zoom: 0.5;
+      //overflow: hidden;
+    }
+    .carousel > img {
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      transition: transform ease 0.5s;
+    }
+  </style>
+  <body>
+    <div id="container"></div>
+    <script>
+      class Carousel {
+        constructor() {
+          this.root = null;
+          this.data = null;
+        }
+        render() {
+          this.root = document.createElement("div");
+          this.root.classList.add("carousel");
+
+          for (let d of this.data) {
+            let element = document.createElement("img");
+            element.src = d;
+            // 关闭图片默认效果
+            element.addEventListener("dragstart",event=>event.preventDefault())
+            this.root.appendChild(element);
+          }
+          let position = 0;
+          // 无限循环回调
+          let nextPic = () => {
+            // debugger
+            // 对数据长度取余小技巧
+            let nextPosition = (position + 1) % this.data.length;
+            let current = this.root.childNodes[position];
+            let next = this.root.childNodes[nextPosition];
+            // 动画代码 起始位置
+            current.style.transition = "ease 0s";
+            next.style.transition = "ease 0s";
+            current.style.transform = `translateX(${-100 * position}%)`;
+            next.style.transform = `translateX(${100 - 100 * nextPosition}%)`;
+            // 这里如果使用requestAnimationFrame 需要套两层
+            setTimeout(function () {
+              // 动画代码 终止位置
+              // 把current移动到-100%的位置 把下一张挪到0的位置（无论当前位置是哪里，依据原始位置进行计算）
+              current.style.transition = ""; // "" means use css rules
+              next.style.transition = "";
+              current.style.transform = `translateX(${-100 - 100 * position}%)`;
+              next.style.transform = `translateX(${-100 * nextPosition}%)`;
+              position = nextPosition;
+            },16);
+            setTimeout(nextPic, 3000);
+          };
+          // 先等三秒执行第一次
+          // setTimeout(nextPic, 3000);
+
+          this.root.addEventListener("mousedown",event => {
+            let startX = event.clientX,startY = event.clientY;
+            let move = event => {
+              console.log(event.clientX - startX,event.clientY - startY)
+            };
+            let up = event => {
+              document.removeEventListener("mousemove",move)
+              document.removeEventListener("mouseup",up)
+            }
+            document.addEventListener("mousemove",move)
+            document.addEventListener("mouseup",up)
+          })
+        }
+      }
+      // create
+      let carousel = new Carousel();
+
+      // update
+      carousel.data = [
+        "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+        "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+        "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+        "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
+      ];
+
+      carousel.render();
+
+      // mount
+      document.getElementById("container").appendChild(carousel.root);
+    </script>
+  </body>
+</html>
