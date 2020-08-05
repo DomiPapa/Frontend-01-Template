@@ -1,0 +1,43 @@
+<!-- <style>
+  #el {
+    width: 100px;
+    height: 100px;
+    background-color: skyblue;
+  }
+</style>
+
+<div id="el"></div> -->
+<script type="module">
+  // import { Timeline, Animation } from "./animation.js";
+  import { Timeline2 } from "./animation.js";
+
+  let tl = new Timeline2;
+
+  tl.start()
+  // let el = document.getElementById("el");
+  // el.style.transition = "ease 5s";
+
+  // function start() {
+  //   el.style.transform = "translate(300px, 300px)";
+  // }
+
+  // function stop() {
+  //   el.style.transition = "none";
+  //   el.style.transform = getComputedStyle(el).transform;
+  // }
+
+  // let tl = new Timeline();
+
+  // tl.add(
+  //   new Animation(
+  //     el.style,
+  //     "transform",
+  //     (v) => `translateX(${v}px)`,
+  //     0,
+  //     200,
+  //     5000
+  //   )
+  // );
+
+  // tl.start();
+</script>
